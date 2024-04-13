@@ -29,7 +29,7 @@
                         <input type="file" name="doc1" id="">
                         <input type="file" name="doc1" id="">
                     </form>
-                        <button onclick="checkout()" class="content-center text-white text-lg px-6 py-3">Payer</button>
+                        <button onclick="checkout()" class="">Buy fees</button>
 
                 </div>
             </div>
