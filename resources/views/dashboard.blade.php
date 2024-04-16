@@ -14,14 +14,14 @@
                         <div class="flex justify-center">
                             <div class="md:w-6/12 mt-5">
                                 <div class="bg-blue-500 h-16 flex items-center justify-center">
-                                    <h1 class="text-xl">Bienvenue sur Ingrov training Pay</h1>
+                                    <h1 class="text-xl">Welcome {{ auth()->user()->name }} Ingrov training Pay</h1>
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                    <h1 class="text-xl">Send all your documents </h1>
+                    <br><br><br>
                     <form action="{{ route('inscriptions.store') }}" method="post" enctype="multipart/form-data">
-                        <input type="file" name="doc1" id="" class="form-control" >
                         <input type="file" name="doc1" id="">
                         <input type="file" name="doc1" id="">
                         <input type="file" name="doc1" id="">
@@ -29,7 +29,8 @@
                         <input type="file" name="doc1" id="">
                         <input type="file" name="doc1" id="">
                     </form>
-                        <button onclick="checkout()" class="">Buy fees</button>
+                    <br><br><br><br><br>
+                        <button onclick="checkout()" class="ml-5">Buy fees</button>
 
                 </div>
             </div>
