@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inscriptions', function (Blueprint $table) {
+        Schema::create('ventes', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('bulletin_path');
-            $table->unsignedInteger('id');
-            $table->foreignId('id')->constrained('users');
+            $table->foreignUuid('produit_id')->constrained('produits');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inscriptions');
+        Schema::dropIfExists('ventes');
     }
 };
