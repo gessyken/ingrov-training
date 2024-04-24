@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Produit;
 use App\Models\Vente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class VenteController extends Controller
 {
@@ -20,7 +22,8 @@ class VenteController extends Controller
      */
     public function create()
     {
-        return view('ventes.create');
+        $produits = Produit::orderBy('nom')->get();
+        return view('ventes.create', compact('produits'));
     }
 
     /**
@@ -28,7 +31,18 @@ class VenteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nom_client' => 'required|string|max:50',
+            'quantite' => 'required|numeric',
+            'produit_id' => 'required|string|max:36',
+        ]);
+
+        $validated['id'] = Str::uuid()->toString();
+        $validated['user_id'] = auth()->id();
+
+        Vente::create($validated);
+
+        return redirect()->back()->with('success', 'Produit has been selled successfully');
     }
 
     /**
