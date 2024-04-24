@@ -12,9 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('ventes', function (Blueprint $table) {
-            $table->string('nom_client')->default(0);
-            $table->integer('quantite')->default(0);
-            $table->float('montant')->default(0);
+            $table->string('status');
+            $table->string('nom_client');
+            $table->integer('quantite');
+            $table->float('montant');
+            $table->float('paye');
         });
     }
 

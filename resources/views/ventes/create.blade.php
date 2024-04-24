@@ -17,7 +17,17 @@
                                 @endforeach
                             @endif
                             @if(session('success') !== null)
-                                Produit vendu avec succes
+                            {{ session('success') }}
+                            @endif
+                            @if(session('qrcode') !== null)
+                                    <div class="row">
+                                        <div class="text-center align-items-center">
+                                            <img src="{{session('qrcode')}}" alt="" class="img-fluid">
+                                            <button class="btn btn-link btn-primary">
+                                                <a download="{{session('qrcode')}}" href="{{session('qrcode')}}">Telecharger</a>
+                                            </button>
+                                        </div>
+                                    </div>
                             @endif
                         </div>
                         <div class="flex flex-wrap">
@@ -25,18 +35,21 @@
                             <form action="{{ route('ventes.store') }}" method="post" class="mt-5 border-3 border-gray-800 w-full">
                                 @csrf
                                 <label for="nom" class="block text-gray-700 font-bold mb-2">Nom du client</label>
-                                <input type="text" name="nom_client" required placeholder="Ex : Stephane MBIA" class="w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <input type="text" name="nom_client" required placeholder="Ex : Stephane MBIA" class="w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500" value="{{old('nom_client')}}">
 
                                 <label for="produit" class="block text-gray-700 font-bold mt-4 mb-2">Produit vendu</label>
                                 <select name="produit_id" class="w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                     @foreach($produits as $produit)
-                                        <option value="{{$produit->id}}">{{ $produit->nom }}</option>
+                                        <option value="{{$produit->id}}">{{ $produit->nom }} - {{ $produit->prix }} FCFA</option>
                                     @endforeach
                                 </select>
                                 <br>
 
                                 <label for="quantite" class="block text-gray-700 font-bold mt-4 mb-2">Quantite</label>
-                                <input type="number" name="quantite" required placeholder="Ex : 3" class="w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <input type="number" name="quantite" required placeholder="Ex : 3" class="w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500" value="{{old('quantite')}}">
+                                <br>
+                                <label for="paye" class="block text-gray-700 font-bold mt-4 mb-2">Montant encaisse</label>
+                                <input type="number" name="paye" required placeholder="Ex : 30000" class="w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500" value="{{old('paye')}}">
                                 <br>
                                 <input type="submit" value="Vendre" required class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5">
                             </form>

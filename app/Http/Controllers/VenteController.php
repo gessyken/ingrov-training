@@ -6,6 +6,8 @@ use App\Models\Produit;
 use App\Models\Vente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Storage;
 
 class VenteController extends Controller
 {
@@ -34,15 +36,44 @@ class VenteController extends Controller
         $validated = $request->validate([
             'nom_client' => 'required|string|max:50',
             'quantite' => 'required|numeric',
+            'paye' => 'required|numeric',
             'produit_id' => 'required|string|max:36',
         ]);
-
+        $produit = Produit::find($validated['produit_id']);
+        $facture = (int) $validated['quantite'] * (int) $produit->prix;
         $validated['id'] = Str::uuid()->toString();
         $validated['user_id'] = auth()->id();
+        $validated['montant'] = $facture;
 
-        Vente::create($validated);
+        if ($facture == (int) $validated['paye'])
+        {
+            $validated['status'] = 'paye';
 
-        return redirect()->back()->with('success', 'Produit has been selled successfully');
+            Vente::create($validated);
+
+            return redirect()->back()->with('success', 'Produit has been selled successfully');
+        }
+        elseif ($facture < (int) $validated['paye'])
+        {
+            $validated['status'] = 'reste';
+
+            $qrCode = QrCode::size(300)->generate("Montant a rembourser " . $validated['paye'] - $facture);
+
+            $filename = 'public/qrcodes/' . auth()->user()->name . '/' . date('d-m-Y') . '/' . $validated['nom_client'] . '-' . $validated['id'] . '.jpg';
+
+            Storage::put($filename, $qrCode);
+
+            $qrCodeF = Storage::url($filename);
+
+            Vente::create($validated);
+
+            return redirect()->back()->with('qrcode', $qrCodeF);
+        }
+        elseif ($facture > (int) $validated['paye'])
+        {
+            return redirect()->back()->with('success', 'Le montant encaisse doit etre superieur ou egale a ' . $facture);
+        }
+
     }
 
     /**

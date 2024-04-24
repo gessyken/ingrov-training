@@ -9,7 +9,16 @@ class Vente extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id','produit_id', 'user_id'];
+    protected $fillable = [
+        'id',
+        'produit_id',
+        'user_id',
+        'status',
+        'nom_client',
+        'quantite',
+        'montant',
+        'paye',
+    ];
 
     public $incrementing = false;
 
